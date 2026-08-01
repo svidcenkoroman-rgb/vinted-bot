@@ -71,7 +71,7 @@ CATEGORIES = {
 }
 
 import os
-COOKIE = os.environ.get('VINTED_COOKIE', '')
+COOKIE = os.environ.get('VINTED_COOKIE', '').strip()
 
 # Загружаем cookie из файла если есть (свежее чем в коде)
 if os.path.exists('cookie.txt'):
