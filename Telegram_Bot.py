@@ -6,6 +6,9 @@ from telegram.ext import Updater, CommandHandler
 
 TOKEN = '8734372802:AAF3KKneCCOEYdZz_Z6Zv4kx2nNo39NNgM0'
 
+ADMIN_CHAT_ID = 7321242131
+
+
 CATEGORIES = {
     # ═══ МУЖСКОЕ ═══
     'мужская обувь': 16,
@@ -67,8 +70,18 @@ CATEGORIES = {
     'шарфы': 1241,
 }
 
+COOKIE = '__ps_r=https://www.google.com/; __ps_lu=https://www.vinted.pl/; v_udt=UDdEZU55ZVR6bkZBaWdnOXo2TUpuQ2RCaFN3SC0tM1c4K0lGYW56SzhuWXF5My0tWlBQN25tdGdXNlJxbFRUYWhVOWZpUT09; anon_id=dc3d5138-f0e2-44b6-b322-67bac0ad7f0e; anonymous-locale=pl-fr; anonymous-iso-locale=pl-PL; cf_clearance=rMMLJnmc17s8j9H6UI1hwiSd3XKNV5LgT.lTRtk5Gsw-1785338479-1.2.1.1-MvU.HBwNSX3gNhGfLM5G_cyALQ8UTdlNsDhB_1vck9kmmX7BHfR.XlfM7GP4oV5HQscdkBXFFlhHFQSHxsUBF0nVWkr1xKjRKbj3zuEKZqDCMGm5DTbvmvZiznJfyXa1EBQgbwEaNysHxJob9d6NwOkVUV.GzUNIdspaqMAsJNjVQCUYmH_njgN1_EF8hUbvrJ0qzgj8HyPkR2GASewwvk4JxsAKePSXSdp_sD3NFa8oOm2Sm4cwxXhwC7dXQ_YKGYRJ065WUh0INHMnQtzXw8kZpUhjoBu.q8LmyybPvX2ByIRwTQ_9Y9WBsrwHQTrC74j2kNpBHU9yzzdmKgz1HTxf1PB1DPv5ORwv20uSW280E.ozGnd_fB9ELkch0AMJa9brsWxY6pBf3mJDoOmPaZchxwhIzSSrFJsBMEKBhOODI3SbOrLVMN0BDyew0XT7NOgcScfBHjt0wEuUCgHMtQ; access_token_web=eyJraWQiOiJFNTdZZHJ1SHBsQWp1MmNObzFEb3JIM2oyN0J1NS1zX09QNVB3UGlobjVNIiwiYWxnIjoiUFMyNTYifQ.eyJhcHBfaWQiOjQsImF1ZCI6ImZyLmNvcmUuYXBpIiwiY2xpZW50X2lkIjoid2ViIiwiZXhwIjoxNzg1MzQ1NjgwLCJpYXQiOjE3ODUzMzg0ODAsImlzcyI6InZpbnRlZC1pYW0tc2VydmljZSIsInB1cnBvc2UiOiJhY2Nlc3MiLCJzY29wZSI6InB1YmxpYyIsInNpZCI6IjM3MzJkYzhmLTE3ODM2NzMxNDYifQ.MTeNLQl_gkNxFPLKvPFxr8rXd3LBxo_BQoez_CUYrf-jYAc939aWem3EguxS4MYKgGa5_f-ns2rdM64rgeanEtZbaR_5XGeAYmXtcId0AgMrxvFBTFAnZICW_eHBiVAgo90iQuWTn9gcllswg5mYB3xeA8qdZGm9VWAnrRUZrGYSFV9DD3IRtfsm4vMccst7XICJUNuSME4HRkZEQvSWn_FYjuCUO_-Y_QNcMW-pRFaJW-1kSMzBz1F4cn5-8T_XzhpI5wlQ_zFsNwiXv-Selkdwm0nn6-m_Y-yJpYxB2uzJF1qHlxFJsW_eMIzP7XvGb-v_rsKS0eqRVAUsLw8Gnw; _vinted_fr_session=ZUZPemQ5d1Exc0RYbDBDSUNzV2N5dlI1YzNzNXg1d1NOOXR5dVpLSWFzbEQwVUFJbFJLOG5Md1hpcXVmbW1PY2liRTNiL0xmeC8rb0Q2cWl3bDBUeEJWZVdCQ0cxN2EreWlDQ2pZaFk0RzN6NUpGcm0raFhEbDRhRmJneHNETVRGMTdibkJyNnM3K3pRMWQwdHErVml4clpwQitYd0pCdFhMcHVMTDFYUit6c1NCbWxuR0FxUCtoM0xZVjRLNjdldGUvdEJpWkZKck1adVlNQTZkemxkZ1VKS2UyS1UwdXBCMGsxUi9vTktYSlFJMmduWmpoemlBU0phTnhFa1VqZzJ3WWo5cTg1ajhGRmswRkdJL0pySjlBbDVIV09VSmU0TVdIQkhEU0h3YW54bGxOb0ZPM3J5aGs5MkJFTXl2VlpRZGJaMFREeWxqMEpHb0NnYUhhNHJHbWI0Y0xyK0E1Ky9IcVhPY09odlhNPS0tTUpEY2tjajVQalJNalk1Z1I0cjFhUT09--8f998828ac064b2d743cf2363b6a9fd7302c4ae7'
+
 import os
-COOKIE = os.environ.get('VINTED_COOKIE', '')
+import re
+
+# Загружаем cookie из файла если есть (свежее чем в коде)
+if os.path.exists('cookie.txt'):
+    with open('cookie.txt', 'r') as f:
+        saved_cookie = f.read().strip()
+        if saved_cookie:
+            COOKIE = saved_cookie
+            print("Cookie загружены из файла ✅")
 
 headers = {
     'accept': 'application/json,text/plain,*/*',
@@ -86,6 +99,7 @@ headers = {
     'x-anon-id': 'dc3d5138-f0e2-44b6-b322-67bac0ad7f0e',
     'x-csrf-token': '75f6c9fa-dc8e-4e52-a000-e09dd4084b3e',
 }
+
 
 # ═══════════════════════════════════
 # ОПРЕДЕЛЕНИЕ ЦВЕТА ПО HEX
@@ -205,6 +219,23 @@ def get_items_from_vinted(query, pages=5, category_id=None):
 
         if response.status_code != 200:
             print(f"Ошибка: {response.text[:200]}")
+            # Уведомляем если 401
+            if response.status_code == 401:
+                try:
+                    from telegram import Bot
+                    bot = Bot(token=TOKEN)
+                    bot.send_message(
+                        chat_id=ADMIN_CHAT_ID,
+                        text='⚠️ Cookie истекли!\n\n'
+                             'Сделай:\n'
+                             '1. Открой vinted.pl в Chrome\n'
+                             '2. F12 → Network → Fetch/XHR\n'
+                             '3. Прокрути страницу вниз\n'
+                             '4. Правая кнопка на запрос → Copy as cURL\n'
+                             '5. Напиши мне: /updatecookie [вставь cURL]'
+                    )
+                except:
+                    pass
             break
 
         items = response.json().get('items', [])
@@ -668,6 +699,61 @@ def sold_stats(update, context):
     update.message.reply_text(msg)
 create_database()
 
+def update_cookie(update, context):
+    if not context.args:
+        update.message.reply_text(
+            '📋 Как обновить cookie:\n\n'
+            '1. Открой vinted.pl в Chrome\n'
+            '2. F12 → Network → Fetch/XHR\n'
+            '3. Прокрути страницу вниз\n'
+            '4. Правая кнопка на любой запрос\n'
+            '   → Copy → Copy as cURL\n'
+            '5. Напиши боту:\n'
+            '/updatecookie [вставь весь cURL текст]'
+        )
+        return
+
+    import re
+    curl_text = ' '.join(context.args)
+
+    # Ищем cookie в cURL
+    cookie_match = re.search(r"-b '([^']+)'", curl_text)
+    if not cookie_match:
+        cookie_match = re.search(r'-b "([^"]+)"', curl_text)
+
+    if not cookie_match:
+        update.message.reply_text(
+            '❌ Не могу найти cookie.\n'
+            'Убедись что скопировал именно "Copy as cURL"'
+        )
+        return
+
+    new_cookie = cookie_match.group(1)
+
+    # Обновляем глобальные заголовки
+    global headers
+    headers['cookie'] = new_cookie
+
+    # Сохраняем в файл для перезапуска
+    with open('cookie.txt', 'w') as f:
+        f.write(new_cookie)
+
+    # Проверяем что работает
+    session = requests.Session()
+    response = session.get(
+        'https://www.vinted.pl/api/v2/catalog/items',
+        headers=headers,
+        params={'search_text': 'Nike', 'per_page': 1}
+    )
+
+    if response.status_code == 200:
+        update.message.reply_text('✅ Cookie обновлены! Бот снова работает.')
+    else:
+        update.message.reply_text(
+            f'⚠️ Cookie сохранены но проверка дала статус {response.status_code}\n'
+            f'Попробуй написать /item Nike'
+        )
+
 updater = Updater(TOKEN)
 dp = updater.dispatcher
 dp.add_handler(CommandHandler('start', start))
@@ -675,6 +761,7 @@ dp.add_handler(CommandHandler('analyze', analyze))
 dp.add_handler(CommandHandler('item', item_analyze))
 dp.add_handler(CommandHandler('categories', categories))
 dp.add_handler(CommandHandler('sold', sold_stats))
+dp.add_handler(CommandHandler('updatecookie', update_cookie))
 
 print('🤖 Бот запущен!')
 # Запускаем мониторинг в фоне
